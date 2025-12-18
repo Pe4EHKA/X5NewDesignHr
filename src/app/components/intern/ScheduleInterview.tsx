@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { AppContextType } from '../../App';
+import { AppContextType } from '../../types';
 import { ArrowLeft, Calendar, Clock } from 'lucide-react';
 
 type ScheduleInterviewProps = {
@@ -51,7 +51,7 @@ export function ScheduleInterview({ context }: ScheduleInterviewProps) {
     '16:00', '16:30', '17:00', '17:30', '18:00'
   ];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!selectedDate || !selectedTime) {
@@ -72,7 +72,7 @@ export function ScheduleInterview({ context }: ScheduleInterviewProps) {
     );
 
     if (interviewStage) {
-      context.updateCandidateProgress(candidate.id, program.id, {
+      await context.updateCandidateProgress(candidate.id, program.id, {
         stageResults: progress.stageResults.map(sr =>
           sr.stageId === progress.currentStageId
             ? { ...sr, scheduledDate: scheduledDateTime }

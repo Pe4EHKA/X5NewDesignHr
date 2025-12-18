@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { AppContextType } from '../../App';
+import { AppContextType } from '../../types';
 import { Plus, Search, FileDown, FileUp, Users, Briefcase, Eye, X } from 'lucide-react';
 import { CandidateInfoCard } from '../CandidateInfoCard';
 

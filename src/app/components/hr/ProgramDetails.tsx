@@ -1,4 +1,4 @@
-import { AppContextType } from '../../App';
+import { AppContextType } from '../../types';
 import { ArrowLeft, Users, CheckCircle, Clock, XCircle, AlertCircle, X } from 'lucide-react';
 import { useState } from 'react';
 import { CandidateInfoCard } from '../CandidateInfoCard';

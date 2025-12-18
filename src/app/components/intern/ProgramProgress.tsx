@@ -1,4 +1,4 @@
-import { AppContextType } from '../../App';
+import { AppContextType } from '../../types';
 import { ArrowLeft, CheckCircle, Lock, Play, Clock } from 'lucide-react';
 
 type ProgramProgressProps = {
@@ -29,7 +29,7 @@ export function ProgramProgress({ context }: ProgramProgressProps) {
     p => p.candidateId === candidate.id && p.programId === program.id
   );
 
-  const handleStartStage = (stageId: string) => {
+  const handleStartStage = async (stageId: string) => {
     const stage = program.stages.find(s => s.id === stageId);
     
     if (!stage) return;
@@ -37,7 +37,7 @@ export function ProgramProgress({ context }: ProgramProgressProps) {
     if (stage.type === 'video_interview') {
       // Инициализируем прогресс если его нет
       if (!progress) {
-        context.updateCandidateProgress(candidate.id, program.id, {
+        await context.updateCandidateProgress(candidate.id, program.id, {
           candidateId: candidate.id,
           programId: program.id,
           currentStageId: stageId,

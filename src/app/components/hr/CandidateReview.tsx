@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { AppContextType } from '../../App';
+import { AppContextType } from '../../types';
 import { ArrowLeft, Video, CheckCircle, XCircle, FileText, ChevronRight } from 'lucide-react';
 import { CandidateInfoCard } from '../CandidateInfoCard';
 
@@ -77,7 +77,7 @@ export function CandidateReview({ context }: CandidateReviewProps) {
     return stage?.type === 'video_interview' && sr.videoAnswers;
   });
 
-  const handleAccept = () => {
+  const handleAccept = async () => {
     // Переводим на следующий этап
     const currentStageIndex = program.stages.findIndex(s => s.id === progress.currentStageId);
     const nextStage = program.stages[currentStageIndex + 1];
@@ -85,10 +85,10 @@ export function CandidateReview({ context }: CandidateReviewProps) {
     if (nextStage) {
       // Если следующий этап - интервью, кандидат должен выбрать слот
       if (nextStage.type === 'interview') {
-        context.updateCandidateProgress(candidate.id, program.id, {
+        await context.updateCandidateProgress(candidate.id, program.id, {
           status: 'passed', // Меняем статус, чтобы стажёр мог записаться
           currentStageId: nextStage.id,
-          stageResults: progress.stageResults.map(sr => 
+          stageResults: progress.stageResults.map(sr =>
             sr.stageId === progress.currentStageId
               ? { ...sr, status: 'passed' }
               : sr
@@ -96,10 +96,10 @@ export function CandidateReview({ context }: CandidateReviewProps) {
         });
         alert('Кандидат переведён на следующий этап! Ему доступна запись на интервью.');
       } else {
-        context.updateCandidateProgress(candidate.id, program.id, {
+        await context.updateCandidateProgress(candidate.id, program.id, {
           status: 'in_progress',
           currentStageId: nextStage.id,
-          stageResults: progress.stageResults.map(sr => 
+          stageResults: progress.stageResults.map(sr =>
             sr.stageId === progress.currentStageId
               ? { ...sr, status: 'passed' }
               : sr
@@ -109,9 +109,9 @@ export function CandidateReview({ context }: CandidateReviewProps) {
       }
     } else {
       // Это был последний этап
-      context.updateCandidateProgress(candidate.id, program.id, {
+      await context.updateCandidateProgress(candidate.id, program.id, {
         status: 'passed',
-        stageResults: progress.stageResults.map(sr => 
+        stageResults: progress.stageResults.map(sr =>
           sr.stageId === progress.currentStageId
             ? { ...sr, status: 'passed' }
             : sr
@@ -128,7 +128,7 @@ export function CandidateReview({ context }: CandidateReviewProps) {
     setShowRejectModal(true);
   };
 
-  const confirmReject = () => {
+  const confirmReject = async () => {
     const feedback = selectedFeedbackTemplate || customFeedback;
     
     if (!feedback) {
@@ -136,9 +136,9 @@ export function CandidateReview({ context }: CandidateReviewProps) {
       return;
     }
 
-    context.updateCandidateProgress(candidate.id, program.id, {
+    await context.updateCandidateProgress(candidate.id, program.id, {
       status: 'rejected',
-      stageResults: progress.stageResults.map(sr => 
+      stageResults: progress.stageResults.map(sr =>
         sr.stageId === progress.currentStageId
           ? { ...sr, status: 'rejected', feedback }
           : sr
