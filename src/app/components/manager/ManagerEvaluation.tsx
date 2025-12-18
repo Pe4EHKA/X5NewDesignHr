@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { AppContextType, ManagerEvaluationData } from '../../App';
+import { AppContextType, ManagerEvaluationData } from '../../types';
 import { ArrowLeft, Send, ThumbsUp, ThumbsDown, Minus } from 'lucide-react';
 
 type ManagerEvaluationProps = {
@@ -152,7 +152,7 @@ export function ManagerEvaluation({ context }: ManagerEvaluationProps) {
       submittedAt: new Date()
     };
 
-    context.addEvaluation(evaluation);
+    await context.addEvaluation(evaluation);
     setSubmitted(true);
   };
 

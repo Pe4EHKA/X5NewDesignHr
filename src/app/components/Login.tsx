@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { AppContextType, User } from '../App';
+import { login, quickLoginAs } from '../api';
+import { AppContextType, User } from '../types';
 import { Building2, LogIn } from 'lucide-react';
 
 type LoginProps = {
@@ -10,59 +11,23 @@ export function Login({ context }: LoginProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Простая mock авторизация
-    // В реальном приложении здесь был бы API запрос
-    let user: User | null = null;
-
-    if (email === 'hr@x5.ru' && password === 'hr') {
-      user = {
-        id: 'hr1',
-        email: 'hr@x5.ru',
-        name: 'HR Менеджер',
-        role: 'hr'
-      };
+    try {
+      const user = await login(email, password);
       context.setUser(user);
-      context.navigateTo('hr-dashboard');
-    } else if (email === 'intern@x5.ru' && password === 'intern') {
-      const candidate = context.candidates[0];
-      user = {
-        id: candidate.id,
-        email: candidate.email,
-        name: `${candidate.firstName} ${candidate.lastName}`,
-        role: 'intern'
-      };
-      context.setUser(user);
-      context.navigateTo('intern-dashboard');
-    } else {
-      alert('Неверный email или пароль. Для демо используйте: hr или intern');
+      context.navigateTo(user.role === 'hr' ? 'hr-dashboard' : 'intern-dashboard');
+    } catch (error) {
+      console.error(error);
+      alert('Неверный email или пароль. Для демо: hr@x5.ru/hr или intern@x5.ru/intern');
     }
   };
 
   const handleQuickLogin = (role: 'hr' | 'intern') => {
-    if (role === 'hr') {
-      const user: User = {
-        id: 'hr1',
-        email: 'hr@x5.ru',
-        name: 'HR Менеджер',
-        role: 'hr'
-      };
-      context.setUser(user);
-      context.navigateTo('hr-dashboard');
-    } else {
-      // Используем c3 - новый стажёр без прогресса
-      const candidate = context.candidates.find(c => c.id === 'c3') || context.candidates[0];
-      const user: User = {
-        id: candidate.id,
-        email: candidate.email,
-        name: `${candidate.firstName} ${candidate.lastName}`,
-        role: 'intern'
-      };
-      context.setUser(user);
-      context.navigateTo('intern-dashboard');
-    }
+    const user = quickLoginAs(role, context.candidates);
+    context.setUser(user);
+    context.navigateTo(role === 'hr' ? 'hr-dashboard' : 'intern-dashboard');
   };
 
   return (

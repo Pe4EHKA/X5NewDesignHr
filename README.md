@@ -7,5 +7,7 @@
 
   Run `npm i` to install the dependencies.
 
+  Start the mock API server with `npm run server` (port 4000 by default).
+
   Run `npm run dev` to start the development server.
   

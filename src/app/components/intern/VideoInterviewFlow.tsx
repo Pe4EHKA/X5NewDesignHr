@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { AppContextType } from '../../App';
+import { AppContextType } from '../../types';
 import { Video, Circle, Square, AlertTriangle } from 'lucide-react';
 
 type VideoInterviewFlowProps = {
@@ -130,7 +130,7 @@ export function VideoInterviewFlow({ context }: VideoInterviewFlowProps) {
     }
   };
 
-  const handleSubmitAll = () => {
+  const handleSubmitAll = async () => {
     // Сохраняем все ответы в прогресс
     const videoAnswers = answers.map((answer, index) => ({
       question: answer.question,
@@ -151,7 +151,7 @@ export function VideoInterviewFlow({ context }: VideoInterviewFlowProps) {
         : sr
     );
 
-    context.updateCandidateProgress(candidate.id, program.id, {
+    await context.updateCandidateProgress(candidate.id, program.id, {
       status: 'pending_review',
       stageResults: updatedStageResults
     });
@@ -170,7 +170,7 @@ export function VideoInterviewFlow({ context }: VideoInterviewFlowProps) {
     }
   };
 
-  const handleForceExit = () => {
+  const handleForceExit = async () => {
     // Отправляем все записанные ответы и завершаем интервью
     if (answers.length === 0) {
       context.navigateTo('program-progress');
@@ -196,7 +196,7 @@ export function VideoInterviewFlow({ context }: VideoInterviewFlowProps) {
         : sr
     );
 
-    context.updateCandidateProgress(candidate.id, program.id, {
+    await context.updateCandidateProgress(candidate.id, program.id, {
       status: 'pending_review',
       stageResults: updatedStageResults
     });

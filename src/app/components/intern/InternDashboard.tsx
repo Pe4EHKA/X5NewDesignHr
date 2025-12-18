@@ -1,4 +1,4 @@
-import { AppContextType } from '../../App';
+import { AppContextType } from '../../types';
 import { LogOut, FolderOpen, Play, CheckCircle, Clock, XCircle } from 'lucide-react';
 
 type InternDashboardProps = {

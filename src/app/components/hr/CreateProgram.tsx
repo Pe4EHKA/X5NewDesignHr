@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { AppContextType, Program, ProgramStage } from '../../App';
+import { AppContextType, Program, ProgramStage } from '../../types';
 import { ArrowLeft, Plus, Trash2, GripVertical } from 'lucide-react';
 
 type CreateProgramProps = {
@@ -72,7 +72,7 @@ export function CreateProgram({ context }: CreateProgramProps) {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!name || !description || !direction) {
@@ -101,7 +101,7 @@ export function CreateProgram({ context }: CreateProgramProps) {
       }))
     };
 
-    context.addProgram(program);
+    await context.addProgram(program);
     context.navigateTo('hr-dashboard');
   };
 

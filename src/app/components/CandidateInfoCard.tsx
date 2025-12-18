@@ -1,4 +1,4 @@
-import { Candidate } from '../App';
+import { Candidate } from '../types';
 import { User, Mail, Phone, MessageCircle, FileText, Calendar, MapPin, GraduationCap, Globe, Clock } from 'lucide-react';
 
 type CandidateInfoCardProps = {
